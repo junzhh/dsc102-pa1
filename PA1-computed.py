@@ -20,7 +20,7 @@ def PA1(user_reviews_csv,products_csv):
     product_id = {"asin":str, "salesRank": str, "imUrl": str, "categories": str, "title": str, "description": str, "price": float, "related": str, "brand": str}
     review = dd.read_csv(user_reviews_csv,dtype=review_di)
     product = dd.read_csv(products_csv,dtype=product_id)
-    df = product[["asin","price"]].merge(review[["asin","overall"]],how="inner",on="asin").set_index("asin")
+    df = product[["asin","price"]].set_index('asin').join(review[["asin","overall"]].set_index('asin'),how="inner")
     def slice(x):
         try:
             a = ""
@@ -31,7 +31,7 @@ def PA1(user_reviews_csv,products_csv):
         except ValueError:
             return x
     task1_reviews = (review.isnull().sum() * 100 / len(review))
-    task1_products =(product.isnull().sum() * 100 / len(product))
+    task1_products = (product.isnull().sum() * 100 / len(product))
     task2 = df['price'].corr(df['overall'],method="pearson")
     task3 = product["price"].describe()
     task4 = product["categories"].dropna().str.strip('][').apply(slice).value_counts()
