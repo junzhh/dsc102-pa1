@@ -38,7 +38,7 @@ def PA1(user_reviews_csv,products_csv):
     task1_reviews, task1_products, task2, task3, task4 = da.compute(task1_reviews, task1_products, task2, task3, task4)
     task1_reviews = task1_reviews.round(2)
     task1_products = task1_products.round(2)
-    task2 = task2
+    task2 = round(task2,2)
     task3  = task3.round(2)
     task3 = task3[['mean','std','50%','min', 'max']]
     task4 = task4.sort_values(ascending=False)
