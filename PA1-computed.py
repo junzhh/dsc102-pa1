@@ -42,7 +42,34 @@ def PA1(user_reviews_csv,products_csv):
     task3  = task3.round(2)
     task3 = task3[['mean','std','50%','min', 'max']]
     task4 = task4.sort_values(ascending=False)
-    print(task4)
+    roduct_keys = product.asin.values
+    product_asin_hashmap = dict.fromkeys(product['asin'],1)
+    related_ids = review['asin']
+    q5_flag = 0
+    for i in related_ids:
+        if i not in product_asin_hashmap.keys():
+            q5_flag = 1
+            break
+    def check(elem):
+        try:
+            keys = ['also_bought', 'also_viewed', 'buy_after_viewing','bought_together']
+            for k in keys:
+                if isinstance(elem[k], list):
+                    for i in elem[k]:
+                        if i not in product_asin_hashmap.keys():
+                            return 1
+                else:
+                    if elem[k] not in product_asin_hashmap.keys():
+                        return 1
+        except KeyError:
+            pass
+    related = product['related'].dropna()
+    related = related.dropna().apply(lambda x: json.loads(x.replace("'",'"')),meta="dict")
+    q6_flag = 0
+    for elem in related:
+        if check(elem) == 1:
+            q6_flag = 1
+            break
     
 #     print(task1_reviews)
 #     print(task1_products)
